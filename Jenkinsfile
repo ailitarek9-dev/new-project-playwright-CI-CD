@@ -7,9 +7,11 @@ pipeline {
         }  
     }
     parameters {
-        choice(name: 'test', choices: ['navigateur', 'tags',], description: 'Chosissez un navigateur')
-        booleanParam(name: 'lancer', defaultValue: true, description: 'Lancertous les test')
-        booleanParam(name: '', defaultValue: true, description: 'Lancer tous les test')
+        choice(name: 'navigateur', choices: ['chromium', 'firefox','webkit'], description: 'Chosissez un navigateur')
+        booleanParam(name: 'lancer', defaultValue: false, description: 'Lancer tous les test')
+        choice(name: 'tag', choices: ['@e2e', '@smoke','@valide'], description: 'Chosissez des tag')
+        booleanParam(name: 'lancer_tag', defaultValue: false, description: 'Lancer les test avec tag')
+   
     }
 
     stages {
@@ -18,11 +20,23 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('lancer le deuxieme collection') {
+        stage('lancer le test') {
                 steps {
-                
-                sh'npx playwright test'
+                script {
+                    if(params.lancer){
+                        if(params.lancer_tag)
+                    sh"npx playwright test --grep" + ${params.tag} "--project="+${params.navigateur}
+                    }else {
+                        sh"npx playwright test --project=" +${params.navigateur}
+                    }
+                    else if (params.lancer_tag){
+                        sh"npx playwright test --grep" + ${params.tag}
+                    }
+                    else{
+                    sh"npx playwright test"
+                    }
                 }
+            }
         }
     }
 }
