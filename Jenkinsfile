@@ -24,7 +24,7 @@ pipeline {
                 steps {
                 script {
                     if(params.lancer){
-                        if(params.lancer_tag)
+                        if(params.lancer_tag){
                     sh"npx playwright test --grep" + ${params.tag} "--project="+${params.navigateur}
                     }else {
                         sh"npx playwright test --project=" +${params.navigateur}
@@ -39,4 +39,5 @@ pipeline {
             }
         }
     }
+}
 }
