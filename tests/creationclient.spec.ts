@@ -1,7 +1,7 @@
 import {expect, test } from '@playwright/test'
 
 
-test("US-04 : Création d'un client", async function ({page}){
+test("US-04 : Création d'un client", {tag:["@e2e","@smoke"]}, async function ({page}){
     await page.goto("https://thrundrz.fr/gestion/")
     
     // cliquer sur la bouton creer un compt
