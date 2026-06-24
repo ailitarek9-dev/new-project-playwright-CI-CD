@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker
         { 
-            image 'mcr.microsoft.com/playwright:v1.59.1-noble'
+            image 'mcr.microsoft.com/playwright:v1.61.1-noble'
             args '-u=root --entrypoint='
         }  
     }
@@ -22,18 +22,18 @@ pipeline {
         }
         stage('lancer le test') {
                 steps {
-                script {
-                    if(params.lancer){
-                        if(params.lancer_tag){
-                    sh"npx playwright test --grep" + ${params.tag} "--project="+${params.navigateur}
-                    }else {
+                    script {
+                        if(params.lancer){
+                            if(params.lancer_tag){
+                                sh"npx playwright test --grep" + ${params.tag} "--project="+${params.navigateur}
+                    } else {
                         sh"npx playwright test --project=" +${params.navigateur}
                     }
-                    else if (params.lancer_tag){
-                        sh"npx playwright test --grep" + ${params.tag}
-                    }
-                    else{
-                    sh"npx playwright test"
+                    } else {
+                        if (params.lancer_tag){
+                            sh"npx playwright test --grep" + ${params.tag}
+                    } else {
+                    sh'npx playwright test'
                     }
                 }
             }
